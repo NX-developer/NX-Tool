@@ -10,6 +10,7 @@
 #include <jni.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <atomic>
 
 static void* InitThread(void*) {
     NX_LOGI("NX Tool starting, target %s (%s)", NX_TARGET_VERSION, NX_TARGET_ABI);
@@ -30,7 +31,11 @@ static void* InitThread(void*) {
     return nullptr;
 }
 
+static std::atomic<bool> g_started{false};
+
 static void StartInit() {
+    bool expected = false;
+    if (!g_started.compare_exchange_strong(expected, true)) return;
     pthread_t thread;
     pthread_create(&thread, nullptr, InitThread, nullptr);
     pthread_detach(thread);

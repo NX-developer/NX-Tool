@@ -1,6 +1,6 @@
 #include "HookManager.hpp"
 #include "../Utils/Logger.hpp"
-#include <dobby.h>
+#include "shadowhook.h"
 
 namespace HookManager {
 
@@ -9,9 +9,10 @@ namespace HookManager {
             NX_LOGE("Hook target is null");
             return false;
         }
-        int result = DobbyHook(target, replacement, original);
-        if (result != 0) {
-            NX_LOGE("DobbyHook failed at %p (code %d)", target, result);
+        void* stub = shadowhook_hook_func_addr(target, replacement, original);
+        if (stub == nullptr) {
+            int err = shadowhook_get_errno();
+            NX_LOGE("shadowhook failed at %p errno=%d (%s)", target, err, shadowhook_to_errmsg(err));
             return false;
         }
         NX_LOGI("Hooked %p", target);
@@ -19,6 +20,7 @@ namespace HookManager {
     }
 
     void Init() {
-        NX_LOGI("HookManager ready");
+        int r = shadowhook_init(SHADOWHOOK_MODE_UNIQUE, false);
+        NX_LOGI("shadowhook_init returned %d", r);
     }
 }

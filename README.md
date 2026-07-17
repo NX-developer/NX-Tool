@@ -12,8 +12,10 @@ In-game injection mod menu for Minecraft Bedrock (Android).
 Push to GitHub. Actions builds libnxtool.so and the loader APK.
 
 ## Inject
+Target must contain libminecraftpe.so (merged universal APK, or split_config.arm64_v8a).
+libs-dir is the lib/arm64-v8a folder from the CI artifact (libnxtool.so + libshadowhook.so).
 ```
-python patcher/inject.py minecraft.apk out/lib/arm64-v8a/libnxtool.so \
+python patcher/inject.py minecraft-universal.apk --libs-dir ./out/lib/arm64-v8a \
   -o minecraft-nxtool.apk --keystore nx.keystore --ks-pass yourpass --ks-alias nxkey
 ```
 Install minecraft-nxtool.apk, launch, tap the NX button to open the menu.

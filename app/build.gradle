@@ -6,6 +6,7 @@ plugins {
 android {
     namespace 'com.nxteam.nxtool'
     compileSdk 34
+    ndkVersion '25.2.9519653'
 
     defaultConfig {
         applicationId "com.nxteam.nxtool"

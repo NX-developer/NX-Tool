@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.NXTool" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:colorBackground">@color/nx_background</item>
+        <item name="android:windowBackground">@color/nx_background</item>
+        <item name="colorAccent">@color/nx_accent</item>
+        <item name="android:textColorPrimary">@color/nx_text</item>
+        <item name="android:statusBarColor">@color/nx_background</item>
+        <item name="android:navigationBarColor">@color/nx_background</item>
+    </style>
+</resources>

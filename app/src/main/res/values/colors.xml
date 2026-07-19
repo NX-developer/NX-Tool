@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="nx_background">#0D1117</color>
+    <color name="nx_surface">#161B22</color>
+    <color name="nx_surface_alt">#1C232C</color>
+    <color name="nx_outline">#2A323D</color>
+    <color name="nx_accent">#00E5A0</color>
+    <color name="nx_accent_dim">#0A7A57</color>
+    <color name="nx_text">#E6EDF3</color>
+    <color name="nx_text_dim">#8B949E</color>
+    <color name="ic_launcher_background">#0D1117</color>
+</resources>

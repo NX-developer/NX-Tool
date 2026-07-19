@@ -1,0 +1,43 @@
+NX Tool
+Copyright (C) 2026 NX Team / Novatex
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version. See LICENSE for the full text.
+
+---
+
+THIRD PARTY NOTICES
+
+This project derives from and includes work from Lumina Client.
+
+    Lumina Client
+    https://github.com/TheProjectLumina/LuminaClient
+    Copyright (C) The Project Lumina
+    Licensed under the GNU General Public License v3.0
+
+Lumina Client is itself built on the following upstream projects:
+
+    CloudburstMC Protocol (Bedrock codec)
+    https://github.com/CloudburstMC/Protocol
+
+    CloudburstMC Netty transport for RakNet
+    https://github.com/CloudburstMC/Network
+
+    minecraft-msftauth (Microsoft/Xbox authentication)
+    Copyright (C) coelho
+
+    Dear ImGui
+    https://github.com/ocornut/imgui
+    Copyright (C) Omar Cornut, MIT License
+
+    ShadowHook
+    https://github.com/bytedance/android-inline-hook
+    Copyright (C) ByteDance Inc., MIT License
+
+MODIFICATIONS
+
+Changes made by NX Team relative to the upstream Lumina Client are
+recorded in the git history of this repository and summarised in
+CHANGES.md.

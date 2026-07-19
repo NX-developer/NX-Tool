@@ -23,3 +23,11 @@ Install minecraft-nxtool.apk, launch, tap the NX button to open the menu.
 ## Status
 Framework is complete and version-agnostic. Cheat modules need real signatures
 for 1.26.33.1 in app/src/main/cpp/Sdk/Signatures.hpp (see REVERSE_ENGINEERING.md).
+
+## License
+
+NX Tool is licensed under the GNU General Public License v3.0. See LICENSE.
+
+This project is a derivative work of Lumina Client
+(https://github.com/TheProjectLumina/LuminaClient), also GPL-3.0.
+See NOTICE for attribution and CHANGES.md for modifications.

@@ -16,4 +16,8 @@ This project is a derivative work of Lumina Client (GPL-3.0).
 - Kept the original com.project.lumina.relay package names so that the
   vendored JNI entry points and upstream attribution remain intact
 
+- Replaced the module set with relay tooling and quality of life features:
+  packet capture, connection stats, chat logging, waypoints, auto sprint
+- Added a relay screen and a live packet inspector
+
 Further changes are listed as they are made.

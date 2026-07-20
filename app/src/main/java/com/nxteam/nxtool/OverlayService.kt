@@ -241,8 +241,8 @@ class OverlayService : Service() {
         container.addView(panelHeader())
 
         val list = LinearLayout(themed).apply { orientation = LinearLayout.VERTICAL }
-        for (category in ModuleCategory.values()) {
-            val items = ModuleRegistry.byCategory(category)
+        for (category in FeatureCategory.values()) {
+            val items = FeatureRegistry.byCategory(category)
             if (items.isEmpty()) continue
             list.addView(TextView(themed).apply {
                 text = category.label.uppercase()
@@ -330,7 +330,7 @@ class OverlayService : Service() {
         }
     }
 
-    private fun overlayRow(module: ModuleInfo): View {
+    private fun overlayRow(feature: Feature): View {
         return LinearLayout(themed).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
@@ -345,17 +345,17 @@ class OverlayService : Service() {
             ).apply { bottomMargin = dp(6) }
 
             val title = TextView(themed).apply {
-                text = module.name
+                text = feature.name
                 textSize = 14f
-                setTextColor(if (module.enabled) col(R.color.nx_accent) else col(R.color.nx_text))
+                setTextColor(if (feature.enabled) col(R.color.nx_accent) else col(R.color.nx_text))
                 typeface = Typeface.DEFAULT_BOLD
                 layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             }
             addView(title)
             addView(Switch(themed).apply {
-                isChecked = module.enabled
+                isChecked = feature.enabled
                 setOnCheckedChangeListener { _, checked ->
-                    module.enabled = checked
+                    feature.enabled = checked
                     title.setTextColor(if (checked) col(R.color.nx_accent) else col(R.color.nx_text))
                 }
             })

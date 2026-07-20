@@ -86,9 +86,9 @@ class MainActivity : AppCompatActivity() {
         }
         card.addView(row("Minecraft", mc.label, mc.fromPlayStore))
         card.addView(row("Target version", "1.26.33.1", true))
-        card.addView(row("Mode", "Relay (proxy)", true))
+        card.addView(row("Relay", RelayManager.statusText, RelayManager.running))
         card.addView(row("Overlay permission", if (canDrawOverlay()) "Granted" else "Required", canDrawOverlay()))
-        card.addView(row("Modules loaded", ModuleRegistry.modules.size.toString(), true))
+        card.addView(row("Features", FeatureRegistry.features.size.toString(), true))
         root.addView(card)
 
         if (!canDrawOverlay()) {
@@ -133,12 +133,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        root.addView(secondaryButton("MODULE LIST") {
+        root.addView(secondaryButton("RELAY") {
+            startActivity(Intent(this, RelayActivity::class.java))
+        })
+
+        root.addView(secondaryButton("PACKET INSPECTOR") {
+            startActivity(Intent(this, PacketInspectorActivity::class.java))
+        })
+
+        root.addView(secondaryButton("FEATURE LIST") {
             startActivity(Intent(this, MenuActivity::class.java))
         })
 
         root.addView(TextView(this).apply {
-            text = "Test build. Modules are display only and are not wired to the relay yet."
+            text = "Start the relay, then connect Minecraft to 127.0.0.1:19132."
             textSize = 12f
             setTextColor(col(R.color.nx_text_dim))
             gravity = Gravity.CENTER

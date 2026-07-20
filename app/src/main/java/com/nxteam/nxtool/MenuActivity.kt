@@ -31,8 +31,8 @@ class MenuActivity : AppCompatActivity() {
 
         content.addView(header())
 
-        for (category in ModuleCategory.values()) {
-            val items = ModuleRegistry.byCategory(category)
+        for (category in FeatureCategory.values()) {
+            val items = FeatureRegistry.byCategory(category)
             if (items.isEmpty()) continue
             content.addView(categoryTitle(category.label, items.size))
             content.addView(categoryCard(items))
@@ -51,7 +51,7 @@ class MenuActivity : AppCompatActivity() {
             setPadding(dp(4), 0, dp(4), dp(18))
         }
         bar.addView(TextView(this).apply {
-            text = "MODULES"
+            text = "FEATURES"
             textSize = 22f
             setTextColor(col(R.color.nx_text))
             typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
@@ -71,7 +71,7 @@ class MenuActivity : AppCompatActivity() {
     }
 
     private fun updateCounter() {
-        counterView.text = "${ModuleRegistry.enabledCount()} ON"
+        counterView.text = "${FeatureRegistry.enabledCount()} ON"
     }
 
     private fun categoryTitle(label: String, count: Int): View {
@@ -85,14 +85,14 @@ class MenuActivity : AppCompatActivity() {
         }
     }
 
-    private fun categoryCard(items: List<ModuleInfo>): View {
+    private fun categoryCard(items: List<Feature>): View {
         val card = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = UiKit.card(this@MenuActivity)
             setPadding(dp(4), dp(4), dp(4), dp(4))
         }
-        items.forEachIndexed { index, module ->
-            card.addView(moduleRow(module))
+        items.forEachIndexed { index, feature ->
+            card.addView(featureRow(feature))
             if (index != items.lastIndex) card.addView(divider())
         }
         return card
@@ -110,7 +110,7 @@ class MenuActivity : AppCompatActivity() {
         }
     }
 
-    private fun moduleRow(module: ModuleInfo): View {
+    private fun featureRow(feature: Feature): View {
         val row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
@@ -122,14 +122,14 @@ class MenuActivity : AppCompatActivity() {
             layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
         }
         val title = TextView(this).apply {
-            text = module.name
+            text = feature.name
             textSize = 16f
             setTextColor(col(R.color.nx_text))
             typeface = Typeface.DEFAULT_BOLD
         }
         texts.addView(title)
         texts.addView(TextView(this).apply {
-            text = module.description
+            text = feature.description
             textSize = 12f
             setTextColor(col(R.color.nx_text_dim))
             setPadding(0, dp(3), 0, 0)
@@ -137,9 +137,9 @@ class MenuActivity : AppCompatActivity() {
         row.addView(texts)
 
         val toggle = SwitchCompat(this).apply {
-            isChecked = module.enabled
+            isChecked = feature.enabled
             setOnCheckedChangeListener { _, checked ->
-                module.enabled = checked
+                feature.enabled = checked
                 title.setTextColor(
                     if (checked) col(R.color.nx_accent) else col(R.color.nx_text)
                 )
@@ -149,7 +149,7 @@ class MenuActivity : AppCompatActivity() {
         row.addView(toggle)
 
         row.setOnClickListener {
-            Toast.makeText(this, "${module.name} is not wired to the relay yet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${feature.name} is not active yet", Toast.LENGTH_SHORT).show()
         }
         return row
     }

@@ -1,5 +1,6 @@
 package com.nxteam.nxtool
 
+import android.Manifest
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
@@ -15,7 +16,9 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.content.pm.PackageManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +38,19 @@ class MainActivity : AppCompatActivity() {
             setBackgroundColor(col(R.color.nx_background))
             addView(root)
         })
+        requestNotificationPermission()
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        val granted = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+        if (!granted) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100
+            )
+        }
     }
 
     override fun onResume() {

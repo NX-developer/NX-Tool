@@ -105,13 +105,14 @@ object RelayManager {
             val type = packet.javaClass.simpleName
             PacketLog.add(direction, type, summarise(packet))
             if (packet is TextPacket && FeatureRegistry.isEnabled("ChatLogger")) {
-                val source = packet.sourceName.ifBlank { packet.type?.name ?: "server" }
+                val rawSource: String? = packet.sourceName
+                val source: String = if (rawSource.isNullOrBlank()) (packet.type?.name ?: "server") else rawSource
                 addChat(ChatLine(System.currentTimeMillis(), source, packet.message ?: ""))
             }
         }
 
         private fun summarise(packet: BedrockPacket): String = when (packet) {
-            is TextPacket -> "${packet.sourceName}: ${packet.message}".take(120)
+            is TextPacket -> ("" + packet.sourceName + ": " + packet.message).take(120)
             else -> ""
         }
     }

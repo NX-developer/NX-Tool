@@ -107,7 +107,7 @@ object RelayManager {
             if (packet is TextPacket && FeatureRegistry.isEnabled("ChatLogger")) {
                 val rawSource: String? = packet.sourceName
                 val source: String = if (rawSource.isNullOrBlank()) (packet.type?.name ?: "server") else rawSource
-                addChat(ChatLine(System.currentTimeMillis(), source, packet.message ?: ""))
+                addChat(ChatLine(System.currentTimeMillis(), source, packet.message?.toString() ?: ""))
             }
         }
 

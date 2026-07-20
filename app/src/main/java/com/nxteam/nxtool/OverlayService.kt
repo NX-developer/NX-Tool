@@ -23,7 +23,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
+import android.widget.Switch
+import android.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import kotlin.math.abs
 
@@ -33,6 +34,10 @@ class OverlayService : Service() {
     private var bubble: View? = null
     private var panel: View? = null
     private lateinit var bubbleParams: WindowManager.LayoutParams
+
+    private val themed: Context by lazy {
+        ContextThemeWrapper(this, R.style.Theme_NXTool)
+    }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
     private fun col(id: Int) = ContextCompat.getColor(this, id)
@@ -164,7 +169,7 @@ class OverlayService : Service() {
         val width = (metrics.widthPixels * 0.82f).toInt().coerceAtMost(dp(420))
         val height = (metrics.heightPixels * 0.7f).toInt()
 
-        val container = LinearLayout(this).apply {
+        val container = LinearLayout(themed).apply {
             orientation = LinearLayout.VERTICAL
             background = GradientDrawable().apply {
                 shape = GradientDrawable.RECTANGLE
@@ -178,13 +183,13 @@ class OverlayService : Service() {
 
         container.addView(panelHeader())
 
-        val list = LinearLayout(this).apply {
+        val list = LinearLayout(themed).apply {
             orientation = LinearLayout.VERTICAL
         }
         for (category in ModuleCategory.values()) {
             val items = ModuleRegistry.byCategory(category)
             if (items.isEmpty()) continue
-            list.addView(TextView(this).apply {
+            list.addView(TextView(themed).apply {
                 text = category.label.uppercase()
                 textSize = 11f
                 setTextColor(col(R.color.nx_text_dim))
@@ -195,10 +200,18 @@ class OverlayService : Service() {
             items.forEach { list.addView(overlayRow(it)) }
         }
 
-        container.addView(ScrollView(this).apply {
-            addView(list)
+        container.addView(ScrollView(themed).apply {
+            isFillViewport = true
+            addView(
+                list,
+                LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            )
             layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                height - dp(60)
             )
         })
 
@@ -208,19 +221,24 @@ class OverlayService : Service() {
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            x = bubbleParams.x + dp(64)
-            y = bubbleParams.y
+            x = (bubbleParams.x + dp(64)).coerceIn(dp(8), (metrics.widthPixels - width - dp(8)).coerceAtLeast(dp(8)))
+            y = bubbleParams.y.coerceIn(dp(8), (metrics.heightPixels - height - dp(8)).coerceAtLeast(dp(8)))
         }
 
-        windowManager.addView(container, params)
-        panel = container
+        try {
+            windowManager.addView(container, params)
+            panel = container
+        } catch (e: Exception) {
+            android.util.Log.e("NXTool", "Panel could not be shown", e)
+            panel = null
+        }
     }
 
     private fun panelHeader(): View {
-        return LinearLayout(this).apply {
+        return LinearLayout(themed).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            addView(TextView(this@OverlayService).apply {
+            addView(TextView(themed).apply {
                 text = "NX TOOL"
                 textSize = 16f
                 setTextColor(col(R.color.nx_accent))
@@ -228,7 +246,7 @@ class OverlayService : Service() {
                 letterSpacing = 0.12f
                 layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             })
-            addView(TextView(this@OverlayService).apply {
+            addView(TextView(themed).apply {
                 text = "CLOSE"
                 textSize = 11f
                 setTextColor(col(R.color.nx_text_dim))
@@ -240,7 +258,7 @@ class OverlayService : Service() {
     }
 
     private fun overlayRow(module: ModuleInfo): View {
-        return LinearLayout(this).apply {
+        return LinearLayout(themed).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             setPadding(dp(10), dp(8), dp(6), dp(8))
@@ -253,7 +271,7 @@ class OverlayService : Service() {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply { bottomMargin = dp(6) }
 
-            val title = TextView(this@OverlayService).apply {
+            val title = TextView(themed).apply {
                 text = module.name
                 textSize = 14f
                 setTextColor(if (module.enabled) col(R.color.nx_accent) else col(R.color.nx_text))
@@ -261,7 +279,7 @@ class OverlayService : Service() {
                 layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             }
             addView(title)
-            addView(SwitchCompat(this@OverlayService).apply {
+            addView(Switch(themed).apply {
                 isChecked = module.enabled
                 setOnCheckedChangeListener { _, checked ->
                     module.enabled = checked
